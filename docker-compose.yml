@@ -3,14 +3,14 @@ services:
     nginx:
         image: nginx
         ports:
-            - "8080:8080"
+            - "80:80"
         links:
             - "php-fpm"
         volumes:
-            - /home/workspace/project/:/var/www/html/
-            - /home/workspace/nginx/conf.d/:/etc/nginx/conf.d/
-            - /home/workspace/nginx/nginx.conf:/etc/nginx/nginx.conf:rw
-            - /home/workspace/nginx/logs:/var/log/nginx/
+            - /E/workspace/:/var/www/html/
+            - /E/my-docker-config/nginx/conf.d/:/etc/nginx/conf.d/
+            - /E/my-docker-config/nginx/nginx.conf:/etc/nginx/nginx.conf:rw
+            - /E/my-docker-config/nginx/logs:/etc/nginx/logs/
         depends_on:
             - php-fpm
         container_name: nginx
@@ -22,10 +22,10 @@ services:
         ports:
             - "9000:9000"
         volumes:
-            - /home/workspace/project/:/var/www/html/
-            - /home/workspace/project/php-fpm/conf/php.ini:/usr/local/etc/php/php.ini:rw
+            - /E/workspace/:/var/www/html/
+            - /E/my-docker-config/php-fpm/conf/php.ini:/usr/local/etc/php/php.ini:rw
             #- /home/workspace/project/php-fpm/conf/php-fpm.d/:/usr/local/etc/php-fpm.d/
-            - /home/workspace/project/php-fpm/log/:/var/log/dnmp/:rw
+            - /E/my-docker-config/php-fpm/log/:/var/log/dnmp/:rw
         depends_on:
             - mysql
             - redis
@@ -42,8 +42,8 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - /home/workspace/mysql/conf:/etc/mysql/conf.d
-            - /home/workspace/mysql/data:/var/lib/mysql
+            - /E/my-docker-config/mysql/conf:/etc/mysql/conf.d
+            - /E/my-docker-config/mysql/data:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: 123456
         container_name: mysql

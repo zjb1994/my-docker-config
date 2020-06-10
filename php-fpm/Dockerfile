@@ -35,6 +35,7 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     && docker-php-ext-install \
         curl \
         mbstring \
+		sockets \
         bcmath \
         pdo \
         pdo_mysql \
