@@ -21,6 +21,7 @@ services:
         build: ./php-fpm
         ports:
             - "9000:9000"
+            - "22:22"
         volumes:
             - /E/workspace/:/var/www/html/
             - /E/my-docker-config/php-fpm/conf/php.ini:/usr/local/etc/php/php.ini:rw
@@ -56,6 +57,20 @@ services:
         networks:
             - app
         container_name: redis
+    redis-manage:
+        image: reasonduan/redis-manager
+        ports:
+            - "8182:8182"
+        environment: 
+            DATASOURCE_DATABASE: redis_manager
+            DATASOURCE_URL: jdbc:mysql://mysql/redis_manager?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2b8
+            DATASOURCE_USERNAME: root
+            DATASOURCE_PASSWORD: 123456
+        links:
+            - "mysql"
+        container_name: redis-manage
+        networks:
+            - app
 networks:
     app:
         driver: bridge
