@@ -13,6 +13,7 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
         libtool \
         libxml2-dev \
 		openssh-server \
+		vim \
         postgresql-dev \
         sqlite-dev \
 	    libmcrypt-dev \
@@ -69,31 +70,16 @@ RUN mkdir -p /usr/local/share/composer \
     # 配置composer中国全量镜像
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
-# 对其他容器开放9000 22端口
-EXPOSE 9000
-EXPOSE 22
-
 #安装SSH服务
-#RUN apk add --no-cache openssh-server
 RUN mkdir -p /var/run/sshd
 RUN mkdir -p /root/.ssh
 
-#配置SSH
 #设置ssh远程登陆密码
 RUN sed -i "s/#PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config && \
 	mkdir -p /root/.ssh && chmod 700 /root/.ssh/ && \
     ssh-keygen -A && \
     echo "root:root" | chpasswd
 
-#RUN echo "root:123456" | chpasswd
-#RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config  
-#RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config  
-
-#复制Rsa文件到相应位置，并赋予脚本可执行权限
-#ADD authorized_keys /root/.ssh/authorized_keys
-#ADD run.sh /run.sh
-#RUN chmod 755 /run.sh
-
 #设置自启动命令
-#CMD ["/bin/bash","/run.sh"]
-CMD ["/usr/sbin/sshd", "-D"]
+#ENTRYPOINT  ["/usr/sbin/sshd"]
+#CMD ["/bin/bash", "/usr/sbin/sshd"]
